@@ -19,11 +19,11 @@ import { Textarea } from "@/components/ui/textarea";
 
 const formSchema = z.object({
   request: z.string().min(2),
-  url0: z.string(),
-  url1: z.optional(z.string()),
-  url2: z.optional(z.string()),
-  url3: z.optional(z.string()),
-  url4: z.optional(z.string()),
+  urls: z.array(
+    z.object({
+      url: z.string(),
+    }),
+  ),
 });
 
 export function RequestForm() {
@@ -31,6 +31,7 @@ export function RequestForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       request: "",
+      urls: [{ url: "" }],
     },
   });
 
@@ -52,7 +53,6 @@ export function RequestForm() {
     {
       control: form.control, // control props comes from useForm (optional: if you are using FormProvider)
       name: "urls", // unique name for your Field Array
-      defaultValue: [{ url: "" }],
     },
   );
 
@@ -76,31 +76,15 @@ export function RequestForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="url0"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Url 1</FormLabel>
-              <FormControl>
-                <Input placeholder="https://..." {...field} />
-              </FormControl>
-              <FormDescription>
-                Add urls from which we can infer the form.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
         {fields.map((field, index) => (
           <div key={field.id}>
             <FormField
               control={form.control}
-              name={`url${index + 1}`}
+              name={`urls.${index}.url`}
               defaultValue={""}
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Url {index + 2}</FormLabel>
+                  <FormLabel>Url {index + 1}</FormLabel>
                   <FormControl>
                     <Input placeholder="https://..." {...field} />
                   </FormControl>
