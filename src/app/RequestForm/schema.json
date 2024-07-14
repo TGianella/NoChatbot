@@ -10,7 +10,14 @@
       "type": "array",
       "items": {
         "type": "string",
-        "minLength": 3
+        "minLength": 3,
+        "pattern": "^(https?|ftp)://[^\\s/$.?#].[^\\s]*$",
+        "minItems": 1,
+        "uniqueItems": true,
+        "message": {
+          "pattern": "test",
+          "minLength": "coucou"
+        }
       }
     }
   },
