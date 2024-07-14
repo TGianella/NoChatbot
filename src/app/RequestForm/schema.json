@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "properties": {
+    "request": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Please enter your request"
+    },
+    "urls": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 3
+      }
+    }
+  },
+  "required": [
+    "request",
+    "urls"
+  ]
+}
