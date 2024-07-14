@@ -7,30 +7,25 @@ import {
   materialRenderers,
   materialCells,
 } from "@jsonforms/material-renderers";
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { JsonForms } from "@jsonforms/react";
 import Button from "@mui/material/Button";
 import { ErrorObject } from "ajv";
 
 const url = "https://mistralgagnant.alwaysdata.net/api";
-const initialResponseData = {
-  schema: {},
-  uischema: {},
-  data: {},
-};
 
 export const RequestForm = () => {
   const [formData, setFormData] = useState(InitialData);
   const [errors, setErrors] = useState<ErrorObject[]>([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [debugFormSent, setDebugFormSent] = useState(false);
-  const [responseData, setResponseData] = useState(initialResponseData);
+  const [responseData, setResponseData] = useState({});
 
   const currentValidationMode = formSubmitted
     ? "ValidateAndShow"
     : "ValidateAndHide";
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setFormSubmitted(true);
     if (errors.length === 0) {
@@ -44,7 +39,10 @@ export const RequestForm = () => {
         const json = await response.json();
         setResponseData(json);
       } catch (error) {
-        console.error(error.message);
+        let message;
+        if (error instanceof Error) message = error.message;
+        else message = String(error);
+        console.error({ message });
       }
     } else {
       setDebugFormSent(false);
@@ -53,10 +51,14 @@ export const RequestForm = () => {
 
   return (
     <div className="App">
+      {/*@ts-expect-error*/}
       {responseData.schema ? (
         <JsonForms
+          // @ts-expect-error
           schema={responseData.schema}
+          // @ts-expect-error
           uischema={responseData.uischema}
+          // @ts-expect-error
           data={responseData.data}
           renderers={materialRenderers}
           cells={materialCells}
