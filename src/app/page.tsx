@@ -1,7 +1,4 @@
-import Image from "next/image";
-import { Button } from "@/components/ui/button";
-import { RequestForm } from "@/components/RequestForm";
-import { TestForm } from "@/components/TestForm";
+import { RequestForm } from "@/app/RequestForm/RequestForm";
 
 export default function Home() {
   return (

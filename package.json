@@ -10,19 +10,18 @@
   },
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
-    "@radix-ui/react-label": "^2.1.0",
-    "@radix-ui/react-slot": "^1.1.0",
+    "@jsonforms/material-renderers": "^3.3.0",
+    "@jsonforms/react": "^3.3.0",
+    "@mui/material": "^5.16.1",
+    "ajv": "^8.17.1",
     "class-variance-authority": "^0.7.0",
-    "clsx": "^2.1.1",
-    "lucide-react": "^0.396.0",
     "next": "14.2.4",
     "prettier": "^3.3.2",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.52.0",
     "tailwind-merge": "^2.3.0",
-    "tailwindcss-animate": "^1.0.7",
-    "zod": "^3.23.8"
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@hookform/devtools": "^4.3.1",
