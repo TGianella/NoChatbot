@@ -1,0 +1,13 @@
+{
+  "type": "object",
+  "properties": {
+    "question": {
+      "type": "string",
+      "minLength": 3,
+      "description": "Please enter your request"
+    }
+  },
+  "required": [
+    "question"
+  ]
+}

@@ -1,8 +1,8 @@
 "use client";
 
-import Schema from "./schema.json";
-import UiSchema from "./uischema.json";
-import InitialData from "./initialData.json";
+import Schema from "./config/schema.json";
+import UiSchema from "./config/uischema.json";
+import InitialData from "./config/initialData.json";
 import {
   materialRenderers,
   materialCells,
@@ -11,11 +11,13 @@ import { FormEvent, useState } from "react";
 import { JsonForms } from "@jsonforms/react";
 import Button from "@mui/material/Button";
 import { ErrorObject } from "ajv";
+import { DataSentAlert } from "@/app/components/DataSentAlert/DataSentAlert";
 
-const url = "https://mistralgagnant.alwaysdata.net/api";
+const url = "https://mistralgagnant.alwaysdata.net/api/question";
 
 export const RequestForm = () => {
-  const [formData, setFormData] = useState(InitialData);
+  const [questionFormData, setQuestionFormData] = useState(InitialData);
+  const [answerFormData, setAnswerFormData] = useState(InitialData);
   const [errors, setErrors] = useState<ErrorObject[]>([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [debugFormSent, setDebugFormSent] = useState(false);
@@ -30,8 +32,15 @@ export const RequestForm = () => {
     setFormSubmitted(true);
     if (errors.length === 0) {
       setDebugFormSent(true);
+      const formattedFormData = JSON.stringify(questionFormData);
       try {
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          method: "POST",
+          body: formattedFormData,
+        });
         if (!response.ok) {
           throw new Error(`Response status: ${response.status}`);
         }
@@ -63,7 +72,7 @@ export const RequestForm = () => {
           renderers={materialRenderers}
           cells={materialCells}
           onChange={({ data, errors }) => {
-            setFormData(data);
+            setAnswerFormData(data);
             setErrors(errors ? (errors as ErrorObject[]) : []);
           }}
           validationMode={currentValidationMode}
@@ -74,11 +83,11 @@ export const RequestForm = () => {
             <JsonForms
               schema={Schema}
               uischema={UiSchema}
-              data={formData}
+              data={questionFormData}
               renderers={materialRenderers}
               cells={materialCells}
               onChange={({ data, errors }) => {
-                setFormData(data);
+                setQuestionFormData(data);
                 setErrors(errors ? (errors as ErrorObject[]) : []);
               }}
               validationMode={currentValidationMode}
@@ -86,15 +95,7 @@ export const RequestForm = () => {
             <Button type="submit">Submit</Button>
           </form>
           {process.env.NODE_ENV === "development" ? (
-            debugFormSent ? (
-              <p className="p-1 mt-1 bg-green-400 rounded border border-green-700">
-                Form data sent
-              </p>
-            ) : (
-              <p className="p-1 mt-1 bg-red-400 rounded border border-red-700">
-                Form data not sent
-              </p>
-            )
+            <DataSentAlert debugFormSent={debugFormSent} />
           ) : null}
         </>
       )}
