@@ -4,8 +4,6 @@ import { RequestPanel } from "@/app/components/RequestPanel/RequestPanel";
 import { ResponsePanel } from "@/app/components/ResponsePanel/ResponsePanel";
 import { FinalAnswerPanel } from "@/app/components/FinalAnswerPanel/FinalAnswerPanel";
 import { useState } from "react";
-import { Panel } from "@/app/components/Panel/Panel";
-import { CircularProgress } from "@mui/material";
 
 export type ResponseData = {
   schema: object;
@@ -21,6 +19,8 @@ export default function Home() {
   const [responseData, setResponseData] = useState<ResponseData>({});
   const [finalAnswer, setFinalAnswer] = useState("");
   const [requestSent, setRequestSent] = useState(false);
+  const [requestFormSubmitted, setRequestFormSubmitted] = useState(false);
+  const [answerFormSubmitted, setAnswerFormSubmitted] = useState(false);
 
   return (
     <main className="flex p-5">
@@ -28,28 +28,19 @@ export default function Home() {
         setResponseData={setResponseData}
         setRequestSent={setRequestSent}
         requestSent={requestSent}
+        formSubmitted={requestFormSubmitted}
+        setFormSubmitted={setRequestFormSubmitted}
       />
-      {requestSent ? (
-        responseData?.schema ? (
-          <ResponsePanel
-            responseData={responseData}
-            setFinalAnswer={setFinalAnswer}
-          />
-        ) : (
-          <Panel backgroundColorClass="bg-sky-200">
-            <div className="self-center py-10">
-              <CircularProgress />
-            </div>
-          </Panel>
-        )
-      ) : (
-        <Panel backgroundColorClass="bg-sky-200" />
-      )}
-      {finalAnswer?.length > 0 ? (
-        <FinalAnswerPanel finalAnswer={finalAnswer} />
-      ) : (
-        <Panel backgroundColorClass="bg-sky-300" />
-      )}
+      <ResponsePanel
+        responseData={responseData}
+        setFinalAnswer={setFinalAnswer}
+        isLoading={requestFormSubmitted}
+        setFormSubmitted={setAnswerFormSubmitted}
+      />
+      <FinalAnswerPanel
+        finalAnswer={finalAnswer}
+        isLoading={answerFormSubmitted}
+      />
     </main>
   );
 }

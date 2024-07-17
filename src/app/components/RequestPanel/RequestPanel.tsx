@@ -17,6 +17,8 @@ type RequestPanelProps = {
   setResponseData: Dispatch<SetStateAction<ResponseData>>;
   setRequestSent: Dispatch<SetStateAction<boolean>>;
   requestSent: boolean;
+  formSubmitted: boolean;
+  setFormSubmitted: Dispatch<SetStateAction<boolean>>;
 };
 
 const questionUrl = "https://mistralgagnant.alwaysdata.net/api/question";
@@ -25,10 +27,11 @@ export const RequestPanel = ({
   setResponseData,
   setRequestSent,
   requestSent,
+  formSubmitted,
+  setFormSubmitted,
 }: RequestPanelProps) => {
   const [questionFormData, setQuestionFormData] = useState(InitialData);
   const [errors, setErrors] = useState<ErrorObject[]>([]);
-  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const currentValidationMode = formSubmitted
     ? "ValidateAndShow"

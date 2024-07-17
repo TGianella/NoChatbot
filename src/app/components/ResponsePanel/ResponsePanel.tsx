@@ -9,10 +9,13 @@ import Button from "@mui/material/Button";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import InitialData from "@/app/components/RequestPanel/config/initialData.json";
 import { ResponseData } from "@/app/page";
+import { CircularProgress } from "@mui/material";
 
 type ResponsePanelProps = {
   responseData: ResponseData;
   setFinalAnswer: Dispatch<SetStateAction<string>>;
+  isLoading: boolean;
+  setFormSubmitted: Dispatch<SetStateAction<boolean>>;
 };
 
 const answerUrl = "https://mistralgagnant.alwaysdata.net/api/answer";
@@ -20,12 +23,15 @@ const answerUrl = "https://mistralgagnant.alwaysdata.net/api/answer";
 export const ResponsePanel = ({
   responseData,
   setFinalAnswer,
+  isLoading,
+  setFormSubmitted,
 }: ResponsePanelProps) => {
   const [answerFormData, setAnswerFormData] = useState(InitialData);
   const [errors, setErrors] = useState<ErrorObject[]>([]);
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (errors.length === 0) {
+      setFormSubmitted(true);
       const formattedFormData = JSON.stringify({
         data: answerFormData,
         uid: responseData.uid,
@@ -53,8 +59,20 @@ export const ResponsePanel = ({
     }
   };
 
-  return (
-    <Panel title="Fill the form" backgroundColorClass="bg-sky-200">
+  let panelContent = (
+    <p>Nothing to show yet, submit the request form first !</p>
+  );
+
+  if (isLoading) {
+    panelContent = (
+      <div className="self-center py-10">
+        <CircularProgress />
+      </div>
+    );
+  }
+
+  if (responseData?.schema) {
+    panelContent = (
       <form onSubmit={handleSubmit}>
         <JsonForms
           schema={responseData.schema}
@@ -69,6 +87,12 @@ export const ResponsePanel = ({
         />
         <Button type="submit">Submit</Button>
       </form>
+    );
+  }
+
+  return (
+    <Panel title="Fill the form" backgroundColorClass="bg-sky-200">
+      {panelContent}
     </Panel>
   );
 };
