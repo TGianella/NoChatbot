@@ -12,6 +12,7 @@ import { DataSentAlert } from "@/app/components/DataSentAlert/DataSentAlert";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Panel } from "@/app/components/Panel/Panel";
 import { ResponseData } from "@/app/page";
+import { postFormData } from "@/lib/postFormData";
 
 type RequestPanelProps = {
   setResponseData: Dispatch<SetStateAction<ResponseData>>;
@@ -20,8 +21,6 @@ type RequestPanelProps = {
   formSubmitted: boolean;
   setFormSubmitted: Dispatch<SetStateAction<boolean>>;
 };
-
-const questionUrl = "https://mistralgagnant.alwaysdata.net/api/question";
 
 export const RequestPanel = ({
   setResponseData,
@@ -41,29 +40,12 @@ export const RequestPanel = ({
     event.preventDefault();
     setFormSubmitted(true);
     if (errors.length === 0) {
-      setRequestSent(true);
-      const formattedFormData = JSON.stringify(questionFormData);
-      try {
-        const response = await fetch(questionUrl, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: formattedFormData,
-        });
-        if (!response.ok) {
-          throw new Error(`Response status: ${response.status}`);
-        }
-
-        const json = await response.json();
-        setResponseData(json);
-      } catch (error) {
-        setRequestSent(false);
-        let message;
-        if (error instanceof Error) message = error.message;
-        else message = String(error);
-        console.error({ message });
-      }
+      const response = await postFormData(
+        questionFormData,
+        setRequestSent,
+        "question",
+      );
+      setResponseData(response);
     } else {
       setRequestSent(false);
     }

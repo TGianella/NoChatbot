@@ -10,6 +10,7 @@ import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import InitialData from "@/app/components/RequestPanel/config/initialData.json";
 import { ResponseData } from "@/app/page";
 import { CircularProgress } from "@mui/material";
+import { postFormData } from "@/lib/postFormData";
 
 type ResponsePanelProps = {
   responseData: ResponseData;
@@ -17,8 +18,6 @@ type ResponsePanelProps = {
   isLoading: boolean;
   setFormSubmitted: Dispatch<SetStateAction<boolean>>;
 };
-
-const answerUrl = "https://mistralgagnant.alwaysdata.net/api/answer";
 
 export const ResponsePanel = ({
   responseData,
@@ -31,31 +30,12 @@ export const ResponsePanel = ({
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (errors.length === 0) {
-      setFormSubmitted(true);
-      const formattedFormData = JSON.stringify({
+      const formData = {
         data: answerFormData,
         uid: responseData.uid,
-      });
-      try {
-        const response = await fetch(answerUrl, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: formattedFormData,
-        });
-        if (!response.ok) {
-          throw new Error(`Response status: ${response.status}`);
-        }
-
-        const json = await response.json();
-        setFinalAnswer(json.answer);
-      } catch (error) {
-        let message;
-        if (error instanceof Error) message = error.message;
-        else message = String(error);
-        console.error({ message });
-      }
+      };
+      const response = await postFormData(formData, setFormSubmitted, "answer");
+      setFinalAnswer(response.answer);
     }
   };
 
