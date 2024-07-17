@@ -9,12 +9,17 @@ import {
 import { ErrorObject } from "ajv";
 import Button from "@mui/material/Button";
 import { DataSentAlert } from "@/app/components/DataSentAlert/DataSentAlert";
-import { FormEvent, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Panel } from "@/app/components/Panel/Panel";
+import { ResponseData } from "@/app/page";
 
 const questionUrl = "https://mistralgagnant.alwaysdata.net/api/question";
 
-export const RequestPanel = ({ setResponseData }) => {
+export const RequestPanel = ({
+  setResponseData,
+}: {
+  setResponseData: Dispatch<SetStateAction<ResponseData>>;
+}) => {
   const [questionFormData, setQuestionFormData] = useState(InitialData);
   const [debugFormSent, setDebugFormSent] = useState(false);
   const [errors, setErrors] = useState<ErrorObject[]>([]);

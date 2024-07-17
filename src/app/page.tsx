@@ -6,8 +6,18 @@ import { FinalAnswerPanel } from "@/app/components/FinalAnswerPanel/FinalAnswerP
 import { useState } from "react";
 import { Panel } from "@/app/components/Panel/Panel";
 
+export type ResponseData = {
+  schema: object;
+  uischema: {
+    type: string;
+  };
+  data: object;
+  uid: string;
+};
+
 export default function Home() {
-  const [responseData, setResponseData] = useState({});
+  //@ts-expect-error
+  const [responseData, setResponseData] = useState<ResponseData>({});
   const [finalAnswer, setFinalAnswer] = useState("");
 
   return (

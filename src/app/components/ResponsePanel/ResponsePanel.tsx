@@ -6,12 +6,21 @@ import {
 } from "@jsonforms/material-renderers";
 import { ErrorObject } from "ajv";
 import Button from "@mui/material/Button";
-import { FormEvent, useState } from "react";
+import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import InitialData from "@/app/components/RequestPanel/config/initialData.json";
+import { ResponseData } from "@/app/page";
+
+type ResponsePanelProps = {
+  responseData: ResponseData;
+  setFinalAnswer: Dispatch<SetStateAction<string>>;
+};
 
 const answerUrl = "https://mistralgagnant.alwaysdata.net/api/answer";
 
-export const ResponsePanel = ({ responseData, setFinalAnswer }) => {
+export const ResponsePanel = ({
+  responseData,
+  setFinalAnswer,
+}: ResponsePanelProps) => {
   const [answerFormData, setAnswerFormData] = useState(InitialData);
   const [errors, setErrors] = useState<ErrorObject[]>([]);
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
@@ -19,7 +28,6 @@ export const ResponsePanel = ({ responseData, setFinalAnswer }) => {
     if (errors.length === 0) {
       const formattedFormData = JSON.stringify({
         data: answerFormData,
-        //@ts-expect-error
         uid: responseData.uid,
       });
       try {
@@ -49,11 +57,8 @@ export const ResponsePanel = ({ responseData, setFinalAnswer }) => {
     <Panel title="Fill the form" backgroundColorClass="bg-sky-200">
       <form onSubmit={handleSubmit}>
         <JsonForms
-          // @ts-expect-error
           schema={responseData.schema}
-          // @ts-expect-error
           uischema={responseData.uischema}
-          // @ts-expect-error
           data={responseData.data}
           renderers={materialRenderers}
           cells={materialCells}
