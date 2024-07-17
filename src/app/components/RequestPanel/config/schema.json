@@ -3,8 +3,7 @@
   "properties": {
     "question": {
       "type": "string",
-      "minLength": 3,
-      "description": "Please enter your request"
+      "minLength": 3
     }
   },
   "required": [
