@@ -13,11 +13,13 @@ import Button from "@mui/material/Button";
 import { ErrorObject } from "ajv";
 import { DataSentAlert } from "@/app/components/DataSentAlert/DataSentAlert";
 
-const url = "https://mistralgagnant.alwaysdata.net/api/question";
+const questionUrl = "https://mistralgagnant.alwaysdata.net/api/question";
+const answerUrl = "https://mistralgagnant.alwaysdata.net/api/answer";
 
 export const RequestForm = () => {
   const [questionFormData, setQuestionFormData] = useState(InitialData);
   const [answerFormData, setAnswerFormData] = useState(InitialData);
+  const [finalAnswer, setFinalAnswer] = useState("");
   const [errors, setErrors] = useState<ErrorObject[]>([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [debugFormSent, setDebugFormSent] = useState(false);
@@ -34,7 +36,7 @@ export const RequestForm = () => {
       setDebugFormSent(true);
       const formattedFormData = JSON.stringify(questionFormData);
       try {
-        const response = await fetch(url, {
+        const response = await fetch(questionUrl, {
           headers: {
             "Content-Type": "application/json",
           },
@@ -58,10 +60,43 @@ export const RequestForm = () => {
     }
   };
 
-  return (
-    <div className="App">
-      {/*@ts-expect-error*/}
-      {responseData.schema ? (
+  const onAnswerSubmit = async (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formattedFormData = JSON.stringify({
+      data: answerFormData,
+      //@ts-expect-error
+      uid: responseData.uid,
+    });
+    try {
+      const response = await fetch(answerUrl, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+        body: formattedFormData,
+      });
+      if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+      }
+
+      const json = await response.json();
+      setFinalAnswer(json.answer);
+    } catch (error) {
+      let message;
+      if (error instanceof Error) message = error.message;
+      else message = String(error);
+      console.error({ message });
+    }
+  };
+
+  if (finalAnswer && finalAnswer.length > 0) {
+    return <p>{finalAnswer}</p>;
+  }
+
+  //@ts-expect-error
+  if (responseData.schema) {
+    return (
+      <form onSubmit={onAnswerSubmit}>
         <JsonForms
           // @ts-expect-error
           schema={responseData.schema}
@@ -77,28 +112,31 @@ export const RequestForm = () => {
           }}
           validationMode={currentValidationMode}
         />
-      ) : (
-        <>
-          <form onSubmit={handleSubmit}>
-            <JsonForms
-              schema={Schema}
-              uischema={UiSchema}
-              data={questionFormData}
-              renderers={materialRenderers}
-              cells={materialCells}
-              onChange={({ data, errors }) => {
-                setQuestionFormData(data);
-                setErrors(errors ? (errors as ErrorObject[]) : []);
-              }}
-              validationMode={currentValidationMode}
-            />
-            <Button type="submit">Submit</Button>
-          </form>
-          {process.env.NODE_ENV === "development" ? (
-            <DataSentAlert debugFormSent={debugFormSent} />
-          ) : null}
-        </>
-      )}
-    </div>
+        <Button type="submit">Submit</Button>
+      </form>
+    );
+  }
+
+  return (
+    <>
+      <form onSubmit={handleSubmit}>
+        <JsonForms
+          schema={Schema}
+          uischema={UiSchema}
+          data={questionFormData}
+          renderers={materialRenderers}
+          cells={materialCells}
+          onChange={({ data, errors }) => {
+            setQuestionFormData(data);
+            setErrors(errors ? (errors as ErrorObject[]) : []);
+          }}
+          validationMode={currentValidationMode}
+        />
+        <Button type="submit">Submit</Button>
+      </form>
+      {process.env.NODE_ENV === "development" ? (
+        <DataSentAlert debugFormSent={debugFormSent} />
+      ) : null}
+    </>
   );
 };
