@@ -13,15 +13,20 @@ import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Panel } from "@/app/components/Panel/Panel";
 import { ResponseData } from "@/app/page";
 
+type RequestPanelProps = {
+  setResponseData: Dispatch<SetStateAction<ResponseData>>;
+  setRequestSent: Dispatch<SetStateAction<boolean>>;
+  requestSent: boolean;
+};
+
 const questionUrl = "https://mistralgagnant.alwaysdata.net/api/question";
 
 export const RequestPanel = ({
   setResponseData,
-}: {
-  setResponseData: Dispatch<SetStateAction<ResponseData>>;
-}) => {
+  setRequestSent,
+  requestSent,
+}: RequestPanelProps) => {
   const [questionFormData, setQuestionFormData] = useState(InitialData);
-  const [debugFormSent, setDebugFormSent] = useState(false);
   const [errors, setErrors] = useState<ErrorObject[]>([]);
   const [formSubmitted, setFormSubmitted] = useState(false);
 
@@ -33,7 +38,7 @@ export const RequestPanel = ({
     event.preventDefault();
     setFormSubmitted(true);
     if (errors.length === 0) {
-      setDebugFormSent(true);
+      setRequestSent(true);
       const formattedFormData = JSON.stringify(questionFormData);
       try {
         const response = await fetch(questionUrl, {
@@ -50,13 +55,14 @@ export const RequestPanel = ({
         const json = await response.json();
         setResponseData(json);
       } catch (error) {
+        setRequestSent(false);
         let message;
         if (error instanceof Error) message = error.message;
         else message = String(error);
         console.error({ message });
       }
     } else {
-      setDebugFormSent(false);
+      setRequestSent(false);
     }
   };
 
@@ -78,7 +84,7 @@ export const RequestPanel = ({
         <Button type="submit">Submit</Button>
       </form>
       {process.env.NODE_ENV === "development" ? (
-        <DataSentAlert debugFormSent={debugFormSent} />
+        <DataSentAlert debugFormSent={requestSent} />
       ) : null}
     </Panel>
   );
