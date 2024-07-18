@@ -1,18 +1,43 @@
 import { Panel } from "@/app/components/Panel/Panel";
-import { Alert, CircularProgress } from "@mui/material";
+import { Alert } from "@mui/material";
 import { AnswerSkeleton } from "@/app/components/AnswerSkeleton/AnswerSkeleton";
+import InitialData from "@/app/components/RequestPanel/config/initialData.json";
+import { useEffect, useState } from "react";
+import { postFormData } from "@/lib/postFormData";
 
 type FinalAnswerPanelProps = {
-  finalAnswer: string;
+  responseUid: string;
+  answerFormData: InitialData;
   isLoading: boolean;
-  isError: Error | null;
 };
 
 export const FinalAnswerPanel = ({
-  finalAnswer,
+  responseUid,
+  answerFormData,
   isLoading,
-  isError,
 }: FinalAnswerPanelProps) => {
+  const [finalAnswer, setFinalAnswer] = useState("");
+  const [responseError, setResponseError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (isLoading) {
+      const fetchData = async () => {
+        const formData = {
+          data: answerFormData,
+          uid: responseUid,
+        };
+        const response = await postFormData(
+          formData,
+          setResponseError,
+          "answer",
+        );
+        setFinalAnswer(response.answer);
+      };
+
+      fetchData().catch(console.error);
+    }
+  }, [isLoading]);
+
   let finalAnswerPanelContent = (
     <p>No answer yet, submit the form returned by the LLM.</p>
   );
@@ -21,7 +46,7 @@ export const FinalAnswerPanel = ({
     finalAnswerPanelContent = <AnswerSkeleton />;
   }
 
-  if (isError) {
+  if (responseError) {
     finalAnswerPanelContent = (
       <Alert severity="error">
         An error happened while fetching data. Please reload and retry.

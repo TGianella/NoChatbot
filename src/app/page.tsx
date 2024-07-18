@@ -6,6 +6,7 @@ import { FinalAnswerPanel } from "@/app/components/FinalAnswerPanel/FinalAnswerP
 import { useState } from "react";
 import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
+import InitialData from "@/app/components/RequestPanel/config/initialData.json";
 
 export type ResponseData = {
   schema: object;
@@ -46,38 +47,33 @@ const theme = createTheme({
 //todo: allow re-requesting (flush panels on request)
 
 export default function Home() {
-  //@ts-expect-error
-  const [responseData, setResponseData] = useState<ResponseData>({});
-  const [finalAnswer, setFinalAnswer] = useState("");
+  const [responseUid, setResponseUid] = useState("");
+  const [questionFormData, setQuestionFormData] = useState(InitialData);
+  const [answerFormData, setAnswerFormData] = useState(InitialData);
   const [requestSent, setRequestSent] = useState(false);
-  const [requestFormSubmitted, setRequestFormSubmitted] = useState(false);
   const [answerFormSubmitted, setAnswerFormSubmitted] = useState(false);
-  const [requestError, setRequestError] = useState<Error | null>(null);
-  const [responseError, setResponseError] = useState<Error | null>(null);
 
   return (
     <ThemeProvider theme={theme}>
       <main className="flex m-5 border border-gray-50">
         <RequestPanel
-          setResponseData={setResponseData}
-          setRequestSent={setRequestSent}
+          questionFormData={questionFormData}
+          setQuestionFormData={setQuestionFormData}
           requestSent={requestSent}
-          formSubmitted={requestFormSubmitted}
-          setFormSubmitted={setRequestFormSubmitted}
-          setRequestError={setRequestError}
+          setRequestSent={setRequestSent}
         />
         <ResponsePanel
-          responseData={responseData}
-          setFinalAnswer={setFinalAnswer}
+          questionFormData={questionFormData}
+          answerFormData={answerFormData}
+          setAnswerFormData={setAnswerFormData}
           isLoading={requestSent}
           setFormSubmitted={setAnswerFormSubmitted}
-          setResponseError={setResponseError}
-          isError={requestError}
+          setResponseUid={setResponseUid}
         />
         <FinalAnswerPanel
-          finalAnswer={finalAnswer}
+          responseUid={responseUid}
+          answerFormData={answerFormData}
           isLoading={answerFormSubmitted}
-          isError={responseError}
         />
       </main>
     </ThemeProvider>

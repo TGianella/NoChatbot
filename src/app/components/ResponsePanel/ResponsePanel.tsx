@@ -6,46 +6,58 @@ import {
 } from "@jsonforms/material-renderers";
 import { ErrorObject } from "ajv";
 import Button from "@mui/material/Button";
-import { Dispatch, FormEvent, SetStateAction, useState } from "react";
+import {
+  Dispatch,
+  FormEvent,
+  SetStateAction,
+  useEffect,
+  useState,
+} from "react";
 import InitialData from "@/app/components/RequestPanel/config/initialData.json";
 import { ResponseData } from "@/app/page";
-import { Alert, CircularProgress, Skeleton } from "@mui/material";
+import { Alert } from "@mui/material";
 import { postFormData } from "@/lib/postFormData";
 import { FormSkeleton } from "@/app/components/FormSkeleton/FormSkeleton";
 
 type ResponsePanelProps = {
-  responseData: ResponseData;
-  setFinalAnswer: Dispatch<SetStateAction<string>>;
+  setAnswerFormData: Dispatch<SetStateAction<ResponseData>>;
+  questionFormData: InitialData;
   isLoading: boolean;
   setFormSubmitted: Dispatch<SetStateAction<boolean>>;
-  setResponseError: Dispatch<SetStateAction<Error | null>>;
-  isError: Error | null;
+  setResponseUid: Dispatch<SetStateAction<string>>;
 };
 
 export const ResponsePanel = ({
-  responseData,
-  setFinalAnswer,
+  setAnswerFormData,
+  questionFormData,
   isLoading,
   setFormSubmitted,
-  setResponseError,
-  isError,
+  setResponseUid,
 }: ResponsePanelProps) => {
-  const [answerFormData, setAnswerFormData] = useState(InitialData);
+  //@ts-expect-error
+  const [responseData, setResponseData] = useState<ResponseData>({});
   const [errors, setErrors] = useState<ErrorObject[]>([]);
+  const [requestError, setRequestError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    if (isLoading) {
+      const fetchData = async () => {
+        const response = await postFormData(
+          questionFormData,
+          setRequestError,
+          "question",
+        );
+        setResponseData(response);
+        setResponseUid(response.uid);
+      };
+
+      fetchData().catch(console.error);
+    }
+  }, [isLoading]);
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (errors.length === 0) {
-      const formData = {
-        data: answerFormData,
-        uid: responseData.uid,
-      };
-      const response = await postFormData(
-        formData,
-        setFormSubmitted,
-        setResponseError,
-        "answer",
-      );
-      setFinalAnswer(response.answer);
+      setFormSubmitted(true);
     }
   };
 
@@ -57,7 +69,7 @@ export const ResponsePanel = ({
     panelContent = <FormSkeleton />;
   }
 
-  if (isError) {
+  if (requestError) {
     panelContent = (
       <Alert severity="error">
         An error happened while fetching data. Please reload and retry.

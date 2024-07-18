@@ -11,27 +11,21 @@ import Button from "@mui/material/Button";
 import { DataSentAlert } from "@/app/components/DataSentAlert/DataSentAlert";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Panel } from "@/app/components/Panel/Panel";
-import { ResponseData } from "@/app/page";
-import { postFormData } from "@/lib/postFormData";
 
 type RequestPanelProps = {
-  setResponseData: Dispatch<SetStateAction<ResponseData>>;
+  questionFormData: InitialData;
+  setQuestionFormData: Dispatch<SetStateAction<InitialData>>;
   setRequestSent: Dispatch<SetStateAction<boolean>>;
   requestSent: boolean;
-  formSubmitted: boolean;
-  setFormSubmitted: Dispatch<SetStateAction<boolean>>;
-  setRequestError: Dispatch<SetStateAction<Error | null>>;
 };
 
 export const RequestPanel = ({
-  setResponseData,
+  questionFormData,
+  setQuestionFormData,
   setRequestSent,
   requestSent,
-  formSubmitted,
-  setFormSubmitted,
-  setRequestError,
 }: RequestPanelProps) => {
-  const [questionFormData, setQuestionFormData] = useState(InitialData);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [errors, setErrors] = useState<ErrorObject[]>([]);
 
   const currentValidationMode = formSubmitted
@@ -42,13 +36,7 @@ export const RequestPanel = ({
     event.preventDefault();
     setFormSubmitted(true);
     if (errors.length === 0) {
-      const response = await postFormData(
-        questionFormData,
-        setRequestSent,
-        setRequestError,
-        "question",
-      );
-      setResponseData(response);
+      setRequestSent(true);
     } else {
       setRequestSent(false);
     }
