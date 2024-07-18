@@ -1,11 +1,12 @@
 "use client";
 
-import { RequestPanel } from "@/app/components/RequestPanel/RequestPanel";
-import { ResponsePanel } from "@/app/components/ResponsePanel/ResponsePanel";
-import { FinalAnswerPanel } from "@/app/components/FinalAnswerPanel/FinalAnswerPanel";
+import { InitialQuestionPanel } from "@/app/components/InitialQuestionPanel/InitialQuestionPanel";
+import { GeneratedFormPanel } from "@/app/components/GeneratedFormPanel/GeneratedFormPanel";
+import { AnswerPanel } from "@/app/components/FinalAnswerPanel/AnswerPanel";
 import { useState } from "react";
 import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
+import InitialData from "@/app/components/InitialQuestionPanel/config/initialData.json";
 
 export type ResponseData = {
   schema: object;
@@ -42,42 +43,38 @@ const theme = createTheme({
   },
 });
 
-//todo: Move fetching into each affected component to unclutter this component
+//todo: fix InitialData typing and rename all variables
 //todo: allow re-requesting (flush panels on request)
+//todo: generate random form skeletons
 
 export default function Home() {
-  //@ts-expect-error
-  const [responseData, setResponseData] = useState<ResponseData>({});
-  const [finalAnswer, setFinalAnswer] = useState("");
-  const [requestSent, setRequestSent] = useState(false);
-  const [requestFormSubmitted, setRequestFormSubmitted] = useState(false);
-  const [answerFormSubmitted, setAnswerFormSubmitted] = useState(false);
-  const [requestError, setRequestError] = useState<Error | null>(null);
-  const [responseError, setResponseError] = useState<Error | null>(null);
+  const [uid, setUid] = useState("");
+  const [initialQuestionFormData, setInitialQuestionFormData] =
+    useState(InitialData);
+  const [initialQuestionSent, setInitialQuestionSent] = useState(false);
+  const [generatedFormData, setGeneratedFormData] = useState({});
+  const [generatedFormSubmitted, setGeneratedFormSubmitted] = useState(false);
 
   return (
     <ThemeProvider theme={theme}>
-      <main className="flex m-5 border border-gray-50">
-        <RequestPanel
-          setResponseData={setResponseData}
-          setRequestSent={setRequestSent}
-          requestSent={requestSent}
-          formSubmitted={requestFormSubmitted}
-          setFormSubmitted={setRequestFormSubmitted}
-          setRequestError={setRequestError}
+      <main className="flex m-5">
+        <InitialQuestionPanel
+          formData={initialQuestionFormData}
+          formDataSetter={setInitialQuestionFormData}
+          requestSent={initialQuestionSent}
+          setRequestSent={setInitialQuestionSent}
         />
-        <ResponsePanel
-          responseData={responseData}
-          setFinalAnswer={setFinalAnswer}
-          isLoading={requestSent}
-          setFormSubmitted={setAnswerFormSubmitted}
-          setResponseError={setResponseError}
-          isError={requestError}
+        <GeneratedFormPanel
+          initialFormData={initialQuestionFormData}
+          generatedFormDataSetter={setGeneratedFormData}
+          shouldFetchData={initialQuestionSent}
+          generatedFormSubmittedSetter={setGeneratedFormSubmitted}
+          uidSetter={setUid}
         />
-        <FinalAnswerPanel
-          finalAnswer={finalAnswer}
-          isLoading={answerFormSubmitted}
-          isError={responseError}
+        <AnswerPanel
+          uid={uid}
+          answerFormData={generatedFormData}
+          shouldFetchData={generatedFormSubmitted}
         />
       </main>
     </ThemeProvider>

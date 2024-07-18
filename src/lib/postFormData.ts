@@ -3,11 +3,9 @@ import { Dispatch, SetStateAction } from "react";
 
 export const postFormData = async (
   formData: any,
-  setFormSubmitted: Dispatch<SetStateAction<boolean>>,
   setError: Dispatch<SetStateAction<Error | null>>,
   endpoint: string,
 ) => {
-  setFormSubmitted(true);
   const formattedFormData = JSON.stringify(formData);
   try {
     const response = await fetch(`${config.baseUrl}${endpoint}`, {

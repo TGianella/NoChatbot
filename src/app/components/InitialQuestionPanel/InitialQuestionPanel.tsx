@@ -1,7 +1,6 @@
 import { JsonForms } from "@jsonforms/react";
-import Schema from "@/app/components/RequestPanel/config/schema.json";
-import UiSchema from "@/app/components/RequestPanel/config/uischema.json";
-import InitialData from "@/app/components/RequestPanel/config/initialData.json";
+import Schema from "@/app/components/InitialQuestionPanel/config/schema.json";
+import UiSchema from "@/app/components/InitialQuestionPanel/config/uischema.json";
 import {
   materialCells,
   materialRenderers,
@@ -11,46 +10,27 @@ import Button from "@mui/material/Button";
 import { DataSentAlert } from "@/app/components/DataSentAlert/DataSentAlert";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Panel } from "@/app/components/Panel/Panel";
-import { ResponseData } from "@/app/page";
-import { postFormData } from "@/lib/postFormData";
+import { QuestionFormData } from "@/types/formData.types";
 
 type RequestPanelProps = {
-  setResponseData: Dispatch<SetStateAction<ResponseData>>;
-  setRequestSent: Dispatch<SetStateAction<boolean>>;
+  formData: QuestionFormData;
+  formDataSetter: Dispatch<SetStateAction<QuestionFormData>>;
   requestSent: boolean;
-  formSubmitted: boolean;
-  setFormSubmitted: Dispatch<SetStateAction<boolean>>;
-  setRequestError: Dispatch<SetStateAction<Error | null>>;
+  setRequestSent: Dispatch<SetStateAction<boolean>>;
 };
 
-export const RequestPanel = ({
-  setResponseData,
-  setRequestSent,
+export const InitialQuestionPanel = ({
+  formData,
+  formDataSetter,
   requestSent,
-  formSubmitted,
-  setFormSubmitted,
-  setRequestError,
+  setRequestSent,
 }: RequestPanelProps) => {
-  const [questionFormData, setQuestionFormData] = useState(InitialData);
   const [errors, setErrors] = useState<ErrorObject[]>([]);
-
-  const currentValidationMode = formSubmitted
-    ? "ValidateAndShow"
-    : "ValidateAndHide";
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setFormSubmitted(true);
     if (errors.length === 0) {
-      const response = await postFormData(
-        questionFormData,
-        setRequestSent,
-        setRequestError,
-        "question",
-      );
-      setResponseData(response);
-    } else {
-      setRequestSent(false);
+      setRequestSent(true);
     }
   };
 
@@ -60,14 +40,13 @@ export const RequestPanel = ({
         <JsonForms
           schema={Schema}
           uischema={UiSchema}
-          data={questionFormData}
+          data={formData}
           renderers={materialRenderers}
           cells={materialCells}
           onChange={({ data, errors }) => {
-            setQuestionFormData(data);
+            formDataSetter(data);
             setErrors(errors ? (errors as ErrorObject[]) : []);
           }}
-          validationMode={currentValidationMode}
         />
         <Button type="submit">Submit</Button>
       </form>
