@@ -20,6 +20,7 @@ type RequestPanelProps = {
   requestSent: boolean;
   formSubmitted: boolean;
   setFormSubmitted: Dispatch<SetStateAction<boolean>>;
+  setRequestError: Dispatch<SetStateAction<Error | null>>;
 };
 
 export const RequestPanel = ({
@@ -28,6 +29,7 @@ export const RequestPanel = ({
   requestSent,
   formSubmitted,
   setFormSubmitted,
+  setRequestError,
 }: RequestPanelProps) => {
   const [questionFormData, setQuestionFormData] = useState(InitialData);
   const [errors, setErrors] = useState<ErrorObject[]>([]);
@@ -43,6 +45,7 @@ export const RequestPanel = ({
       const response = await postFormData(
         questionFormData,
         setRequestSent,
+        setRequestError,
         "question",
       );
       setResponseData(response);

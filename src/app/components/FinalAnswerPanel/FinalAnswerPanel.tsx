@@ -1,14 +1,16 @@
 import { Panel } from "@/app/components/Panel/Panel";
-import { CircularProgress } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 
 type FinalAnswerPanelProps = {
   finalAnswer: string;
   isLoading: boolean;
+  isError: Error | null;
 };
 
 export const FinalAnswerPanel = ({
   finalAnswer,
   isLoading,
+  isError,
 }: FinalAnswerPanelProps) => {
   let finalAnswerPanelContent = (
     <p>No answer yet, submit the form returned by the LLM.</p>
@@ -19,6 +21,14 @@ export const FinalAnswerPanel = ({
       <div className="self-center py-10">
         <CircularProgress />
       </div>
+    );
+  }
+
+  if (isError) {
+    finalAnswerPanelContent = (
+      <Alert severity="error">
+        An error happened while fetching data. Please reload and retry.
+      </Alert>
     );
   }
 

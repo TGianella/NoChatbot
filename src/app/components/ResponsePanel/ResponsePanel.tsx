@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import InitialData from "@/app/components/RequestPanel/config/initialData.json";
 import { ResponseData } from "@/app/page";
-import { CircularProgress } from "@mui/material";
+import { Alert, CircularProgress } from "@mui/material";
 import { postFormData } from "@/lib/postFormData";
 
 type ResponsePanelProps = {
@@ -17,6 +17,8 @@ type ResponsePanelProps = {
   setFinalAnswer: Dispatch<SetStateAction<string>>;
   isLoading: boolean;
   setFormSubmitted: Dispatch<SetStateAction<boolean>>;
+  setResponseError: Dispatch<SetStateAction<Error | null>>;
+  isError: Error | null;
 };
 
 export const ResponsePanel = ({
@@ -24,6 +26,8 @@ export const ResponsePanel = ({
   setFinalAnswer,
   isLoading,
   setFormSubmitted,
+  setResponseError,
+  isError,
 }: ResponsePanelProps) => {
   const [answerFormData, setAnswerFormData] = useState(InitialData);
   const [errors, setErrors] = useState<ErrorObject[]>([]);
@@ -34,7 +38,12 @@ export const ResponsePanel = ({
         data: answerFormData,
         uid: responseData.uid,
       };
-      const response = await postFormData(formData, setFormSubmitted, "answer");
+      const response = await postFormData(
+        formData,
+        setFormSubmitted,
+        setResponseError,
+        "answer",
+      );
       setFinalAnswer(response.answer);
     }
   };
@@ -48,6 +57,14 @@ export const ResponsePanel = ({
       <div className="self-center py-10">
         <CircularProgress />
       </div>
+    );
+  }
+
+  if (isError) {
+    panelContent = (
+      <Alert severity="error">
+        An error happened while fetching data. Please reload and retry.
+      </Alert>
     );
   }
 

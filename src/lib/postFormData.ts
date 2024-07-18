@@ -4,6 +4,7 @@ import { Dispatch, SetStateAction } from "react";
 export const postFormData = async (
   formData: any,
   setFormSubmitted: Dispatch<SetStateAction<boolean>>,
+  setError: Dispatch<SetStateAction<Error | null>>,
   endpoint: string,
 ) => {
   setFormSubmitted(true);
@@ -17,7 +18,7 @@ export const postFormData = async (
       body: formattedFormData,
     });
     if (!response.ok) {
-      throw new Error(`Response status: ${response.status}`);
+      setError(new Error(`Response status: ${response.status}`));
     }
 
     return await response.json();
@@ -25,6 +26,6 @@ export const postFormData = async (
     let message;
     if (error instanceof Error) message = error.message;
     else message = String(error);
-    console.error({ message });
+    setError(new Error(message));
   }
 };
