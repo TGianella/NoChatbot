@@ -13,51 +13,52 @@ import {
   useEffect,
   useState,
 } from "react";
-import InitialData from "@/app/components/RequestPanel/config/initialData.json";
 import { ResponseData } from "@/app/page";
 import { Alert } from "@mui/material";
 import { postFormData } from "@/lib/postFormData";
-import { FormSkeleton } from "@/app/components/FormSkeleton/FormSkeleton";
+import { FormSkeleton } from "@/app/components/skeletons/FormSkeleton/FormSkeleton";
+import { QuestionFormData } from "@/types/formData.types";
 
 type ResponsePanelProps = {
-  setAnswerFormData: Dispatch<SetStateAction<ResponseData>>;
-  questionFormData: InitialData;
-  isLoading: boolean;
-  setFormSubmitted: Dispatch<SetStateAction<boolean>>;
-  setResponseUid: Dispatch<SetStateAction<string>>;
+  generatedFormDataSetter: Dispatch<SetStateAction<ResponseData>>;
+  initialFormData: QuestionFormData;
+  shouldFetchData: boolean;
+  generatedFormSubmittedSetter: Dispatch<SetStateAction<boolean>>;
+  uidSetter: Dispatch<SetStateAction<string>>;
 };
 
-export const ResponsePanel = ({
-  setAnswerFormData,
-  questionFormData,
-  isLoading,
-  setFormSubmitted,
-  setResponseUid,
+export const GeneratedFormPanel = ({
+  generatedFormDataSetter,
+  initialFormData,
+  shouldFetchData,
+  generatedFormSubmittedSetter,
+  uidSetter,
 }: ResponsePanelProps) => {
   //@ts-expect-error
-  const [responseData, setResponseData] = useState<ResponseData>({});
+  const [formData, setFormData] = useState<ResponseData>({});
   const [errors, setErrors] = useState<ErrorObject[]>([]);
-  const [requestError, setRequestError] = useState<Error | null>(null);
+  const [isError, setIsError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (isLoading) {
+    if (shouldFetchData) {
       const fetchData = async () => {
         const response = await postFormData(
-          questionFormData,
-          setRequestError,
+          initialFormData,
+          setIsError,
           "question",
         );
-        setResponseData(response);
-        setResponseUid(response.uid);
+        setFormData(response);
+        uidSetter(response.uid);
       };
 
       fetchData().catch(console.error);
     }
-  }, [isLoading]);
+  }, [initialFormData, shouldFetchData, uidSetter]);
+
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (errors.length === 0) {
-      setFormSubmitted(true);
+      generatedFormSubmittedSetter(true);
     }
   };
 
@@ -65,11 +66,11 @@ export const ResponsePanel = ({
     <p>Nothing to show yet, submit the request form first !</p>
   );
 
-  if (isLoading) {
+  if (shouldFetchData) {
     panelContent = <FormSkeleton />;
   }
 
-  if (requestError) {
+  if (isError) {
     panelContent = (
       <Alert severity="error">
         An error happened while fetching data. Please reload and retry.
@@ -77,17 +78,17 @@ export const ResponsePanel = ({
     );
   }
 
-  if (responseData?.schema) {
+  if (formData?.schema) {
     panelContent = (
       <form onSubmit={handleSubmit}>
         <JsonForms
-          schema={responseData.schema}
-          uischema={responseData.uischema}
-          data={responseData.data}
+          schema={formData.schema}
+          uischema={formData.uischema}
+          data={formData.data}
           renderers={materialRenderers}
           cells={materialCells}
           onChange={({ data, errors }) => {
-            setAnswerFormData(data);
+            generatedFormDataSetter(data);
             setErrors(errors ? (errors as ErrorObject[]) : []);
           }}
         />

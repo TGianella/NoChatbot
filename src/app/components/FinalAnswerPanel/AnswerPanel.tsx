@@ -1,52 +1,47 @@
 import { Panel } from "@/app/components/Panel/Panel";
 import { Alert } from "@mui/material";
-import { AnswerSkeleton } from "@/app/components/AnswerSkeleton/AnswerSkeleton";
-import InitialData from "@/app/components/RequestPanel/config/initialData.json";
+import { AnswerSkeleton } from "@/app/components/skeletons/AnswerSkeleton/AnswerSkeleton";
 import { useEffect, useState } from "react";
 import { postFormData } from "@/lib/postFormData";
 
 type FinalAnswerPanelProps = {
-  responseUid: string;
-  answerFormData: InitialData;
-  isLoading: boolean;
+  uid: string;
+  answerFormData: any;
+  shouldFetchData: boolean;
 };
 
-export const FinalAnswerPanel = ({
-  responseUid,
+export const AnswerPanel = ({
+  uid,
   answerFormData,
-  isLoading,
+  shouldFetchData,
 }: FinalAnswerPanelProps) => {
-  const [finalAnswer, setFinalAnswer] = useState("");
-  const [responseError, setResponseError] = useState<Error | null>(null);
+  const [answer, setAnswer] = useState("");
+  const [isError, setIsError] = useState<Error | null>(null);
 
   useEffect(() => {
-    if (isLoading) {
+    if (shouldFetchData) {
       const fetchData = async () => {
         const formData = {
           data: answerFormData,
-          uid: responseUid,
+          uid: uid,
         };
-        const response = await postFormData(
-          formData,
-          setResponseError,
-          "answer",
-        );
-        setFinalAnswer(response.answer);
+        const response = await postFormData(formData, setIsError, "answer");
+        setAnswer(response.answer);
       };
 
       fetchData().catch(console.error);
     }
-  }, [isLoading]);
+  }, [shouldFetchData]);
 
   let finalAnswerPanelContent = (
     <p>No answer yet, submit the form returned by the LLM.</p>
   );
 
-  if (isLoading) {
+  if (shouldFetchData) {
     finalAnswerPanelContent = <AnswerSkeleton />;
   }
 
-  if (responseError) {
+  if (isError) {
     finalAnswerPanelContent = (
       <Alert severity="error">
         An error happened while fetching data. Please reload and retry.
@@ -54,8 +49,8 @@ export const FinalAnswerPanel = ({
     );
   }
 
-  if (finalAnswer?.length > 0) {
-    finalAnswerPanelContent = <p>{finalAnswer}</p>;
+  if (answer?.length > 0) {
+    finalAnswerPanelContent = <p>{answer}</p>;
   }
 
   return (
