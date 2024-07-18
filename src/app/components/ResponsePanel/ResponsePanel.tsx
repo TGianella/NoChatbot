@@ -9,8 +9,9 @@ import Button from "@mui/material/Button";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import InitialData from "@/app/components/RequestPanel/config/initialData.json";
 import { ResponseData } from "@/app/page";
-import { Alert, CircularProgress } from "@mui/material";
+import { Alert, CircularProgress, Skeleton } from "@mui/material";
 import { postFormData } from "@/lib/postFormData";
+import { FormSkeleton } from "@/app/components/FormSkeleton/FormSkeleton";
 
 type ResponsePanelProps = {
   responseData: ResponseData;
@@ -53,11 +54,7 @@ export const ResponsePanel = ({
   );
 
   if (isLoading) {
-    panelContent = (
-      <div className="self-center py-10">
-        <CircularProgress />
-      </div>
-    );
+    panelContent = <FormSkeleton />;
   }
 
   if (isError) {

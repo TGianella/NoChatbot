@@ -1,5 +1,6 @@
 import { Panel } from "@/app/components/Panel/Panel";
 import { Alert, CircularProgress } from "@mui/material";
+import { AnswerSkeleton } from "@/app/components/AnswerSkeleton/AnswerSkeleton";
 
 type FinalAnswerPanelProps = {
   finalAnswer: string;
@@ -17,11 +18,7 @@ export const FinalAnswerPanel = ({
   );
 
   if (isLoading) {
-    finalAnswerPanelContent = (
-      <div className="self-center py-10">
-        <CircularProgress />
-      </div>
-    );
+    finalAnswerPanelContent = <AnswerSkeleton />;
   }
 
   if (isError) {

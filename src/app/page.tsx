@@ -42,6 +42,9 @@ const theme = createTheme({
   },
 });
 
+//todo: Move fetching into each affected component to unclutter this component
+//todo: allow re-requesting (flush panels on request)
+
 export default function Home() {
   //@ts-expect-error
   const [responseData, setResponseData] = useState<ResponseData>({});
