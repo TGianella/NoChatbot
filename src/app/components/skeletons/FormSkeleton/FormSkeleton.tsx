@@ -1,42 +1,41 @@
 import { Skeleton } from "@mui/material";
+import { getRandomIntegerInRange } from "@/app/components/skeletons/getRandomIntegerInRange";
+import { FormCheckboxSkeleton } from "@/app/components/skeletons/FormSkeleton/FormCheckboxSkeleton";
+import { FormRadioGroupSkeleton } from "@/app/components/skeletons/FormSkeleton/FormRadioGroupSkeleton";
+import { FormInputSkeleton } from "@/app/components/skeletons/FormSkeleton/FormInputSkeleton";
+
+const components = {
+  checkbox: "checkbox",
+  radioGroup: "radioGroup",
+  input: "input",
+};
+
+const getRandomEnumValue = (enumeration: { [key: string]: string }) => {
+  const values = Object.keys(enumeration);
+  const enumKey = values[Math.floor(Math.random() * values.length)];
+  return enumeration[enumKey];
+};
 
 export const FormSkeleton = () => {
+  const numberOfElements = getRandomIntegerInRange(6, 12);
+  const skeleton = Array.from({ length: numberOfElements }, () =>
+    getRandomEnumValue(components),
+  );
+
+  const pickRandomComponent = (element: string) => {
+    switch (element) {
+      case "checkbox":
+        return <FormCheckboxSkeleton />;
+      case "radioGroup":
+        return <FormRadioGroupSkeleton />;
+      case "input":
+        return <FormInputSkeleton />;
+    }
+  };
+
   return (
     <div className="flex flex-col gap-2.5 self-center w-10/12">
-      <div className="flex flex-col gap-0.5">
-        <Skeleton variant="text" width="30%" />
-        <Skeleton variant="rounded" width="auto" height={50} />
-      </div>
-      <div className="flex flex-col gap-0.5">
-        <Skeleton variant="text" width="30%" />
-        <Skeleton variant="rounded" width="auto" height={50} />
-      </div>
-      <div className="flex flex-col gap-0.5">
-        <Skeleton variant="text" width="30%" />
-        <Skeleton variant="rounded" width="auto" height={50} />
-      </div>
-      <Skeleton variant="text" width="90%" />
-      <Skeleton variant="text" width="90%" />
-      <div className="flex gap-4 items-center">
-        <div className="flex gap-2 items-center w-3/12">
-          <Skeleton variant="circular" width={15} height={15} />
-          <Skeleton variant="text" width="100%" />
-        </div>
-        <div className="flex gap-2 items-center w-5/12">
-          <Skeleton variant="circular" width={15} height={15} />
-          <Skeleton variant="text" width="100%" />
-        </div>
-      </div>
-      <div className="flex gap-4 items-center">
-        <div className="flex gap-2 items-center w-4/12">
-          <Skeleton variant="circular" width={15} height={15} />
-          <Skeleton variant="text" width="100%" />
-        </div>
-        <div className="flex gap-2 items-center w-3/12">
-          <Skeleton variant="circular" width={15} height={15} />
-          <Skeleton variant="text" width="100%" />
-        </div>
-      </div>
+      {skeleton.map((element) => pickRandomComponent(element))}
       <Skeleton variant="text" width="20%" />
     </div>
   );

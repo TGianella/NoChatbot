@@ -43,9 +43,6 @@ const theme = createTheme({
   },
 });
 
-//todo: allow re-requesting (flush panels on request)
-//todo: generate random form skeletons
-
 export default function Home() {
   const [uid, setUid] = useState("");
   const [initialQuestionFormData, setInitialQuestionFormData] =

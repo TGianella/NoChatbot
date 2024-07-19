@@ -1,10 +1,11 @@
 "use client";
 
 import { Skeleton } from "@mui/material";
+import { getRandomIntegerInRange } from "@/app/components/skeletons/getRandomIntegerInRange";
 
-const linesNumber = Math.floor(Math.random() * (10 - 3) + 3);
+const linesNumber = getRandomIntegerInRange(3, 10);
 const linesLength = Array.from({ length: linesNumber }, () =>
-  Math.floor(Math.random() * (100 - 85) + 85),
+  getRandomIntegerInRange(85, 100),
 );
 
 export const AnswerSkeleton = () => {
