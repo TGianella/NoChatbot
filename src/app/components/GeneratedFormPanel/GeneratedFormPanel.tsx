@@ -20,7 +20,7 @@ import { FormSkeleton } from "@/app/components/skeletons/FormSkeleton/FormSkelet
 import { QuestionFormData } from "@/types/formData.types";
 
 type ResponsePanelProps = {
-  generatedFormDataSetter: Dispatch<SetStateAction<ResponseData>>;
+  generatedFormDataSetter: Dispatch<SetStateAction<ResponseData | {}>>;
   initialFormData: QuestionFormData;
   shouldFetchData: boolean;
   generatedFormSubmittedSetter: Dispatch<SetStateAction<boolean>>;
@@ -35,7 +35,7 @@ export const GeneratedFormPanel = ({
   uidSetter,
 }: ResponsePanelProps) => {
   //@ts-expect-error
-  const [formData, setFormData] = useState<ResponseData>({});
+  const [formSchemas, setFormSchemas] = useState<ResponseData>({});
   const [errors, setErrors] = useState<ErrorObject[]>([]);
   const [isError, setIsError] = useState<Error | null>(null);
 
@@ -47,11 +47,16 @@ export const GeneratedFormPanel = ({
           setIsError,
           "question",
         );
-        setFormData(response);
+        setFormSchemas(response);
         uidSetter(response.uid);
       };
 
       fetchData().catch(console.error);
+    } else if (formSchemas?.schema) {
+      //@ts-expect-error
+      setFormSchemas({});
+      generatedFormDataSetter({});
+      generatedFormSubmittedSetter(false);
     }
   }, [initialFormData, shouldFetchData, uidSetter]);
 
@@ -78,13 +83,13 @@ export const GeneratedFormPanel = ({
     );
   }
 
-  if (formData?.schema) {
+  if (formSchemas?.schema) {
     panelContent = (
       <form onSubmit={handleSubmit}>
         <JsonForms
-          schema={formData.schema}
-          uischema={formData.uischema}
-          data={formData.data}
+          schema={formSchemas.schema}
+          uischema={formSchemas.uischema}
+          data={formSchemas.data}
           renderers={materialRenderers}
           cells={materialCells}
           onChange={({ data, errors }) => {

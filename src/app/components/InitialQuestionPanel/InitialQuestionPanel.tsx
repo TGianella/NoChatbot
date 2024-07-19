@@ -16,22 +16,27 @@ type RequestPanelProps = {
   formData: QuestionFormData;
   formDataSetter: Dispatch<SetStateAction<QuestionFormData>>;
   requestSent: boolean;
-  setRequestSent: Dispatch<SetStateAction<boolean>>;
+  requestSentSetter: Dispatch<SetStateAction<boolean>>;
 };
 
 export const InitialQuestionPanel = ({
   formData,
   formDataSetter,
   requestSent,
-  setRequestSent,
+  requestSentSetter,
 }: RequestPanelProps) => {
   const [errors, setErrors] = useState<ErrorObject[]>([]);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (errors.length === 0) {
-      setRequestSent(true);
+      requestSentSetter(true);
     }
+  };
+
+  const handleReset = () => {
+    formDataSetter({ question: "" });
+    requestSentSetter(false);
   };
 
   return (
@@ -48,7 +53,10 @@ export const InitialQuestionPanel = ({
             setErrors(errors ? (errors as ErrorObject[]) : []);
           }}
         />
-        <Button type="submit">Submit</Button>
+        <div className="flex gap-3">
+          <Button type="submit">Submit</Button>
+          <Button onClick={handleReset}>Reset</Button>
+        </div>
       </form>
       {process.env.NODE_ENV === "development" ? (
         <DataSentAlert debugFormSent={requestSent} />

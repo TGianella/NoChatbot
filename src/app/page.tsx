@@ -43,7 +43,6 @@ const theme = createTheme({
   },
 });
 
-//todo: fix InitialData typing and rename all variables
 //todo: allow re-requesting (flush panels on request)
 //todo: generate random form skeletons
 
@@ -62,7 +61,7 @@ export default function Home() {
           formData={initialQuestionFormData}
           formDataSetter={setInitialQuestionFormData}
           requestSent={initialQuestionSent}
-          setRequestSent={setInitialQuestionSent}
+          requestSentSetter={setInitialQuestionSent}
         />
         <GeneratedFormPanel
           initialFormData={initialQuestionFormData}

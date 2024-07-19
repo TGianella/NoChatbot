@@ -30,6 +30,8 @@ export const AnswerPanel = ({
       };
 
       fetchData().catch(console.error);
+    } else if (answer?.length > 0) {
+      setAnswer("");
     }
   }, [shouldFetchData]);
 
