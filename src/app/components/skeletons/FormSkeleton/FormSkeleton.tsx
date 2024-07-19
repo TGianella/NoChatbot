@@ -22,20 +22,20 @@ export const FormSkeleton = () => {
     getRandomEnumValue(components),
   );
 
-  const pickRandomComponent = (element: string) => {
+  const pickRandomComponent = (element: string, index: number) => {
     switch (element) {
       case "checkbox":
-        return <FormCheckboxSkeleton />;
+        return <FormCheckboxSkeleton key={index} />;
       case "radioGroup":
-        return <FormRadioGroupSkeleton />;
+        return <FormRadioGroupSkeleton key={index} />;
       case "input":
-        return <FormInputSkeleton />;
+        return <FormInputSkeleton key={index} />;
     }
   };
 
   return (
     <div className="flex flex-col gap-2.5 self-center w-10/12">
-      {skeleton.map((element) => pickRandomComponent(element))}
+      {skeleton.map((element, index) => pickRandomComponent(element, index))}
       <Skeleton variant="text" width="20%" />
     </div>
   );
