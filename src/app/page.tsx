@@ -53,7 +53,7 @@ export default function Home() {
 
   return (
     <ThemeProvider theme={theme}>
-      <main className="flex m-5">
+      <main className="flex flex-col lg:flex-row m-5">
         <InitialQuestionPanel
           formData={initialQuestionFormData}
           formDataSetter={setInitialQuestionFormData}
