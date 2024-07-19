@@ -17,7 +17,7 @@ const getRandomEnumValue = (enumeration: { [key: string]: string }) => {
 };
 
 export const FormSkeleton = () => {
-  const numberOfElements = getRandomIntegerInRange(6, 12);
+  const numberOfElements = getRandomIntegerInRange(6, 10);
   const skeleton = Array.from({ length: numberOfElements }, () =>
     getRandomEnumValue(components),
   );
