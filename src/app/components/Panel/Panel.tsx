@@ -12,7 +12,7 @@ export const Panel = ({
 }: PanelProps) => {
   return (
     <div
-      className={`h-fit lg:h-[calc(100vh-2.5rem)] lg:w-4/12 grow flex flex-col items-stretch gap-10 p-5 lg:overflow-y-scroll ${backgroundColorClass}`}
+      className={`grow lg:grow-0 lg:h-[calc(100vh-5rem)] lg:w-4/12 flex flex-col gap-10 p-5 lg:overflow-y-scroll ${backgroundColorClass}`}
     >
       {title ? (
         <h2 className="font-bold self-center text-center text-xl">{title}</h2>

@@ -7,6 +7,8 @@ import { useState } from "react";
 import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import InitialData from "@/app/components/InitialQuestionPanel/config/initialData.json";
+import Image from "next/image";
+import githubLogoWhite from "./github-mark-white.png";
 
 export type ResponseData = {
   schema: object;
@@ -53,7 +55,10 @@ export default function Home() {
 
   return (
     <ThemeProvider theme={theme}>
-      <main className="flex flex-col lg:flex-row m-5">
+      <header className="flex justify-end items-center h-10 w-screen bg-sky-800 pe-3">
+        <span className="text-white font-bold">NoChatbot</span>
+      </header>
+      <main className="h-[calc(100vh-5rem)] flex flex-col lg:flex-row">
         <InitialQuestionPanel
           formData={initialQuestionFormData}
           formDataSetter={setInitialQuestionFormData}
@@ -73,6 +78,16 @@ export default function Home() {
           shouldFetchData={generatedFormSubmitted}
         />
       </main>
+      <footer className="flex justify-end items-center h-10 w-screen bg-sky-800 pe-3">
+        <a href={"https://github.com/TGianella/NoChatbot"}>
+          <Image
+            src={githubLogoWhite}
+            alt={"github logo"}
+            height={40}
+            width={40}
+          />
+        </a>
+      </footer>
     </ThemeProvider>
   );
 }
