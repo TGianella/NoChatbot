@@ -58,7 +58,7 @@ export default function Home() {
       <header className="flex justify-end items-center h-10 w-screen bg-sky-800 pe-3">
         <span className="text-white font-bold">NoChatbot</span>
       </header>
-      <main className="h-[calc(100vh-5rem)] flex flex-col lg:flex-row">
+      <main className="h-fit lg:h-[calc(100vh-5rem)] flex flex-col lg:flex-row">
         <InitialQuestionPanel
           formData={initialQuestionFormData}
           formDataSetter={setInitialQuestionFormData}
