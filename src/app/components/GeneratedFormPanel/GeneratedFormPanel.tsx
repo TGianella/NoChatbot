@@ -11,6 +11,7 @@ import {
   FormEvent,
   SetStateAction,
   useEffect,
+  useRef,
   useState,
 } from "react";
 import { ResponseData } from "@/app/page";
@@ -42,9 +43,13 @@ export const GeneratedFormPanel = ({
   const [formSchemas, setFormSchemas] = useState<ResponseData>({});
   const [errors, setErrors] = useState<ErrorObject[]>([]);
   const [isError, setIsError] = useState<Error | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (shouldFetchData) {
+      if (panelRef.current && "scrollIntoView" in panelRef.current) {
+        panelRef?.current?.scrollIntoView({ behavior: "smooth" });
+      }
       const fetchData = async () => {
         const response = await postFormData(
           initialFormData,
@@ -102,6 +107,7 @@ export const GeneratedFormPanel = ({
 
   return (
     <Panel
+      ref={panelRef}
       title="Fill the form"
       backgroundColorClass="bg-sky-200"
       success={generatedFormSubmitted}
