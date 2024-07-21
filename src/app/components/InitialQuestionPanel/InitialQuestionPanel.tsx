@@ -7,7 +7,6 @@ import {
 } from "@jsonforms/material-renderers";
 import { ErrorObject } from "ajv";
 import Button from "@mui/material/Button";
-import { DataSentAlert } from "@/app/components/DataSentAlert/DataSentAlert";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Panel } from "@/app/components/Panel/Panel";
 import { QuestionFormData } from "@/types/formData.types";
@@ -34,13 +33,12 @@ export const InitialQuestionPanel = ({
     }
   };
 
-  const handleReset = () => {
-    formDataSetter({ question: "" });
-    requestSentSetter(false);
-  };
-
   return (
-    <Panel title="Ask your question" backgroundColorClass="bg-sky-100">
+    <Panel
+      title="Ask your question"
+      backgroundColorClass="bg-sky-100"
+      success={requestSent}
+    >
       <form onSubmit={handleSubmit}>
         <JsonForms
           schema={Schema}
@@ -55,12 +53,8 @@ export const InitialQuestionPanel = ({
         />
         <div className="flex gap-3">
           <Button type="submit">Submit</Button>
-          <Button onClick={handleReset}>Reset</Button>
         </div>
       </form>
-      {process.env.NODE_ENV === "development" ? (
-        <DataSentAlert debugFormSent={requestSent} />
-      ) : null}
     </Panel>
   );
 };

@@ -12,11 +12,11 @@ export const FormRadioGroupSkeleton = () => {
       <div className="flex gap-4 items-center">
         <div className={`flex gap-2 items-center w-${firstInputWidth}/12`}>
           <Skeleton variant="circular" width={15} height={15} />
-          <Skeleton variant="text" width="100%" />
+          <Skeleton variant="text" width="90%" />
         </div>
         <div className={`flex gap-2 items-center w-${secondInputWidth}/12`}>
           <Skeleton variant="circular" width={15} height={15} />
-          <Skeleton variant="text" width="100%" />
+          <Skeleton variant="text" width="90%" />
         </div>
       </div>
     </>

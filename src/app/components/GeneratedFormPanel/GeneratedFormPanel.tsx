@@ -18,11 +18,14 @@ import { Alert } from "@mui/material";
 import { postFormData } from "@/lib/postFormData";
 import { FormSkeleton } from "@/app/components/skeletons/FormSkeleton/FormSkeleton";
 import { QuestionFormData } from "@/types/formData.types";
+import { ResetButton } from "@/app/components/ResetButton/ResetButton";
+import { ErrorAlert } from "@/app/components/ErrorAlert/ErrorAlert";
 
 type ResponsePanelProps = {
-  generatedFormDataSetter: Dispatch<SetStateAction<ResponseData | {}>>;
+  generatedFormDataSetter: Dispatch<SetStateAction<ResponseData>>;
   initialFormData: QuestionFormData;
   shouldFetchData: boolean;
+  generatedFormSubmitted: boolean;
   generatedFormSubmittedSetter: Dispatch<SetStateAction<boolean>>;
   uidSetter: Dispatch<SetStateAction<string>>;
 };
@@ -31,6 +34,7 @@ export const GeneratedFormPanel = ({
   generatedFormDataSetter,
   initialFormData,
   shouldFetchData,
+  generatedFormSubmitted,
   generatedFormSubmittedSetter,
   uidSetter,
 }: ResponsePanelProps) => {
@@ -52,11 +56,6 @@ export const GeneratedFormPanel = ({
       };
 
       fetchData().catch(console.error);
-    } else if (formSchemas?.schema) {
-      //@ts-expect-error
-      setFormSchemas({});
-      generatedFormDataSetter({});
-      generatedFormSubmittedSetter(false);
     }
   }, [initialFormData, shouldFetchData, uidSetter]);
 
@@ -76,11 +75,7 @@ export const GeneratedFormPanel = ({
   }
 
   if (isError) {
-    panelContent = (
-      <Alert severity="error">
-        An error happened while fetching data. Please reload and retry.
-      </Alert>
-    );
+    panelContent = <ErrorAlert />;
   }
 
   if (formSchemas?.schema) {
@@ -97,13 +92,20 @@ export const GeneratedFormPanel = ({
             setErrors(errors ? (errors as ErrorObject[]) : []);
           }}
         />
-        <Button type="submit">Submit</Button>
+        <div className="flex gap-3">
+          <Button type="submit">Submit</Button>
+          <ResetButton>Reset</ResetButton>
+        </div>
       </form>
     );
   }
 
   return (
-    <Panel title="Fill the form" backgroundColorClass="bg-sky-200">
+    <Panel
+      title="Fill the form"
+      backgroundColorClass="bg-sky-200"
+      success={generatedFormSubmitted}
+    >
       {panelContent}
     </Panel>
   );

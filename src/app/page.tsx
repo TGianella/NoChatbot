@@ -8,7 +8,7 @@ import { ThemeProvider } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 import InitialData from "@/app/components/InitialQuestionPanel/config/initialData.json";
 import Image from "next/image";
-import githubLogoWhite from "./github-mark-white.png";
+import githubLogoWhite from "./assets/github-mark-white.png";
 
 export type ResponseData = {
   schema: object;
@@ -45,6 +45,11 @@ const theme = createTheme({
   },
 });
 
+//todo: history of requests
+//todo: scroll next panel into view on mobile
+//todo: grow active panel
+//todo: remove redundant error handling logic in panels
+
 export default function Home() {
   const [uid, setUid] = useState("");
   const [initialQuestionFormData, setInitialQuestionFormData] =
@@ -69,6 +74,7 @@ export default function Home() {
           initialFormData={initialQuestionFormData}
           generatedFormDataSetter={setGeneratedFormData}
           shouldFetchData={initialQuestionSent}
+          generatedFormSubmitted={generatedFormSubmitted}
           generatedFormSubmittedSetter={setGeneratedFormSubmitted}
           uidSetter={setUid}
         />
