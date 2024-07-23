@@ -1,7 +1,7 @@
 import { Panel } from "@/app/components/Panel/Panel";
 import { Alert } from "@mui/material";
 import { AnswerSkeleton } from "@/app/components/skeletons/AnswerSkeleton/AnswerSkeleton";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { postFormData } from "@/lib/postFormData";
 import Button from "@mui/material/Button";
 import { ResetButton } from "@/app/components/ResetButton/ResetButton";
@@ -19,9 +19,13 @@ export const AnswerPanel = ({
 }: FinalAnswerPanelProps) => {
   const [answer, setAnswer] = useState("");
   const [isError, setIsError] = useState<Error | null>(null);
+  const panelRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (shouldFetchData) {
+      if (panelRef.current && "scrollIntoView" in panelRef.current) {
+        panelRef?.current?.scrollIntoView({ behavior: "smooth" });
+      }
       const fetchData = async () => {
         const formData = {
           data: answerFormData,
@@ -29,6 +33,9 @@ export const AnswerPanel = ({
         };
         const response = await postFormData(formData, setIsError, "answer");
         setAnswer(response.answer);
+        if (panelRef.current && "scrollIntoView" in panelRef.current) {
+          panelRef?.current?.scrollIntoView({ behavior: "smooth" });
+        }
       };
 
       fetchData().catch(console.error);
@@ -61,7 +68,11 @@ export const AnswerPanel = ({
   }
 
   return (
-    <Panel title="Here's your answer" backgroundColorClass="bg-sky-300">
+    <Panel
+      ref={panelRef}
+      title="Here's your answer"
+      backgroundColorClass="bg-sky-300"
+    >
       {finalAnswerPanelContent}
     </Panel>
   );

@@ -1,4 +1,4 @@
-import { PropsWithChildren } from "react";
+import { forwardRef, PropsWithChildren } from "react";
 import { Alert } from "@mui/material";
 import { ErrorBoundary } from "react-error-boundary";
 import { PanelSuccess } from "@/app/components/PanelSuccess/PanelSuccess";
@@ -10,15 +10,14 @@ type PanelProps = PropsWithChildren<{
   success?: boolean;
 }>;
 
-export const Panel = ({
-  title,
-  children,
-  backgroundColorClass,
-  success,
-}: PanelProps) => {
+export const Panel = forwardRef<HTMLDivElement, PanelProps>(function Panel(
+  { title, children, backgroundColorClass, success }: PanelProps,
+  ref,
+) {
   return (
     <div
       className={`relative lg:static grow h-fit lg:grow-0 lg:h-[calc(100vh-5rem)] lg:w-4/12 lg:overflow-y-scroll ${backgroundColorClass}`}
+      ref={ref}
     >
       <PanelSuccess success={success} />
       <div
@@ -31,4 +30,4 @@ export const Panel = ({
       </div>
     </div>
   );
-};
+});
