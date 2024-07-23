@@ -3,6 +3,8 @@ import { Alert } from "@mui/material";
 import { AnswerSkeleton } from "@/app/components/skeletons/AnswerSkeleton/AnswerSkeleton";
 import { useEffect, useState } from "react";
 import { postFormData } from "@/lib/postFormData";
+import Button from "@mui/material/Button";
+import { ResetButton } from "@/app/components/ResetButton/ResetButton";
 
 type FinalAnswerPanelProps = {
   uid: string;
@@ -30,8 +32,6 @@ export const AnswerPanel = ({
       };
 
       fetchData().catch(console.error);
-    } else if (answer?.length > 0) {
-      setAnswer("");
     }
   }, [shouldFetchData]);
 
@@ -52,7 +52,12 @@ export const AnswerPanel = ({
   }
 
   if (answer?.length > 0) {
-    finalAnswerPanelContent = <p>{answer}</p>;
+    finalAnswerPanelContent = (
+      <>
+        <p>{answer}</p>
+        <ResetButton>Ask another question</ResetButton>
+      </>
+    );
   }
 
   return (
