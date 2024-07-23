@@ -46,9 +46,9 @@ const theme = createTheme({
 });
 
 //todo: history of requests
-//todo: scroll next panel into view on mobile
 //todo: grow active panel
 //todo: remove redundant error handling logic in panels
+//todo: make panels fill screen on mobile
 
 export default function Home() {
   const [uid, setUid] = useState("");
@@ -57,6 +57,12 @@ export default function Home() {
   const [initialQuestionSent, setInitialQuestionSent] = useState(false);
   const [generatedFormData, setGeneratedFormData] = useState({});
   const [generatedFormSubmitted, setGeneratedFormSubmitted] = useState(false);
+
+  const activePanel = initialQuestionSent
+    ? generatedFormSubmitted
+      ? "answer"
+      : "generated"
+    : "question";
 
   return (
     <ThemeProvider theme={theme}>
@@ -69,6 +75,7 @@ export default function Home() {
           formDataSetter={setInitialQuestionFormData}
           requestSent={initialQuestionSent}
           requestSentSetter={setInitialQuestionSent}
+          isActive={activePanel === "question"}
         />
         <GeneratedFormPanel
           initialFormData={initialQuestionFormData}
@@ -77,11 +84,13 @@ export default function Home() {
           generatedFormSubmitted={generatedFormSubmitted}
           generatedFormSubmittedSetter={setGeneratedFormSubmitted}
           uidSetter={setUid}
+          isActive={activePanel === "generated"}
         />
         <AnswerPanel
           uid={uid}
           answerFormData={generatedFormData}
           shouldFetchData={generatedFormSubmitted}
+          isActive={activePanel === "answer"}
         />
       </main>
       <footer className="flex justify-end items-center h-10 w-screen bg-sky-800 pe-3">

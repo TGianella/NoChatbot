@@ -15,7 +15,6 @@ import {
   useState,
 } from "react";
 import { ResponseData } from "@/app/page";
-import { Alert } from "@mui/material";
 import { postFormData } from "@/lib/postFormData";
 import { FormSkeleton } from "@/app/components/skeletons/FormSkeleton/FormSkeleton";
 import { QuestionFormData } from "@/types/formData.types";
@@ -29,6 +28,7 @@ type ResponsePanelProps = {
   generatedFormSubmitted: boolean;
   generatedFormSubmittedSetter: Dispatch<SetStateAction<boolean>>;
   uidSetter: Dispatch<SetStateAction<string>>;
+  isActive: boolean;
 };
 
 export const GeneratedFormPanel = ({
@@ -38,6 +38,7 @@ export const GeneratedFormPanel = ({
   generatedFormSubmitted,
   generatedFormSubmittedSetter,
   uidSetter,
+  isActive,
 }: ResponsePanelProps) => {
   //@ts-expect-error
   const [formSchemas, setFormSchemas] = useState<ResponseData>({});
@@ -111,6 +112,7 @@ export const GeneratedFormPanel = ({
       title="Fill the form"
       backgroundColorClass="bg-sky-200"
       success={generatedFormSubmitted}
+      isActive={isActive}
     >
       {panelContent}
     </Panel>

@@ -16,6 +16,7 @@ type RequestPanelProps = {
   formDataSetter: Dispatch<SetStateAction<QuestionFormData>>;
   requestSent: boolean;
   requestSentSetter: Dispatch<SetStateAction<boolean>>;
+  isActive: boolean;
 };
 
 export const InitialQuestionPanel = ({
@@ -23,6 +24,7 @@ export const InitialQuestionPanel = ({
   formDataSetter,
   requestSent,
   requestSentSetter,
+  isActive,
 }: RequestPanelProps) => {
   const [errors, setErrors] = useState<ErrorObject[]>([]);
 
@@ -38,6 +40,7 @@ export const InitialQuestionPanel = ({
       title="Ask your question"
       backgroundColorClass="bg-sky-100"
       success={requestSent}
+      isActive={isActive}
     >
       <form onSubmit={handleSubmit}>
         <JsonForms

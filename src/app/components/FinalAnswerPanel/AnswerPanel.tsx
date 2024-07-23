@@ -3,19 +3,20 @@ import { Alert } from "@mui/material";
 import { AnswerSkeleton } from "@/app/components/skeletons/AnswerSkeleton/AnswerSkeleton";
 import { useEffect, useRef, useState } from "react";
 import { postFormData } from "@/lib/postFormData";
-import Button from "@mui/material/Button";
 import { ResetButton } from "@/app/components/ResetButton/ResetButton";
 
 type FinalAnswerPanelProps = {
   uid: string;
   answerFormData: any;
   shouldFetchData: boolean;
+  isActive: boolean;
 };
 
 export const AnswerPanel = ({
   uid,
   answerFormData,
   shouldFetchData,
+  isActive,
 }: FinalAnswerPanelProps) => {
   const [answer, setAnswer] = useState("");
   const [isError, setIsError] = useState<Error | null>(null);
@@ -72,6 +73,7 @@ export const AnswerPanel = ({
       ref={panelRef}
       title="Here's your answer"
       backgroundColorClass="bg-sky-300"
+      isActive={isActive}
     >
       {finalAnswerPanelContent}
     </Panel>
