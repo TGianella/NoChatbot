@@ -1,12 +1,20 @@
 import Button from "@mui/material/Button";
 import { PropsWithChildren } from "react";
 
-export const ResetButton = ({ children }: PropsWithChildren) => {
+type ResetButtonProps = PropsWithChildren<{
+  color?: "error" | "primary";
+}>;
+
+export const ResetButton = ({
+  children,
+  color = "primary",
+}: ResetButtonProps) => {
   return (
     <Button
       onClick={() => {
         window.location.reload();
       }}
+      color={color}
     >
       {children}
     </Button>
