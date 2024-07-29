@@ -28,7 +28,6 @@ export const Panel = forwardRef<HTMLDivElement, PanelProps>(function Panel(
         backgroundColor: backgroundColorClass,
         transitionProperty: "width",
         transitionDuration: "0.3s",
-        transitionDelay: 0,
       }}
       ref={ref}
     >

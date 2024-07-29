@@ -11,6 +11,8 @@ import Image from "next/image";
 import githubLogoWhite from "./assets/github-mark-white.png";
 import Stack from "@mui/material/Stack";
 import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
 
 export type ResponseData = {
   schema: object;
@@ -48,7 +50,6 @@ const theme = createTheme({
 });
 
 //todo: history of requests
-//todo: grow active panel
 //todo: remove redundant error handling logic in panels
 //todo: make panels fill screen on mobile
 
@@ -68,43 +69,67 @@ export default function Home() {
 
   return (
     <ThemeProvider theme={theme}>
-      <header className="flex justify-end items-center h-10 w-screen bg-sky-800 pe-3">
-        <span className="text-white font-bold">NoChatbot</span>
-      </header>
-      <Stack direction={{ xs: "column", md: "row" }}>
-        <InitialQuestionPanel
-          formData={initialQuestionFormData}
-          formDataSetter={setInitialQuestionFormData}
-          requestSent={initialQuestionSent}
-          requestSentSetter={setInitialQuestionSent}
-          isActive={activePanel === "question"}
-        />
-        <GeneratedFormPanel
-          initialFormData={initialQuestionFormData}
-          generatedFormDataSetter={setGeneratedFormData}
-          shouldFetchData={initialQuestionSent}
-          generatedFormSubmitted={generatedFormSubmitted}
-          generatedFormSubmittedSetter={setGeneratedFormSubmitted}
-          uidSetter={setUid}
-          isActive={activePanel === "generated"}
-        />
-        <AnswerPanel
-          uid={uid}
-          answerFormData={generatedFormData}
-          shouldFetchData={generatedFormSubmitted}
-          isActive={activePanel === "answer"}
-        />
+      <Stack
+        component="header"
+        direction="row-reverse"
+        alignItems="center"
+        sx={{
+          width: "100vw",
+          height: "2.5rem",
+          paddingInlineEnd: "0.75rem",
+          backgroundColor: "rgb(7 89 133)",
+        }}
+      >
+        <Typography variant="h6" component="h1" fontWeight="bold" color="white">
+          NoChatbot
+        </Typography>
       </Stack>
-      <footer className="flex justify-end items-center h-10 w-screen bg-sky-800 pe-3">
-        <a href={"https://github.com/TGianella/NoChatbot"}>
+      <Container component="main" disableGutters maxWidth={false}>
+        <Stack direction={{ xs: "column", md: "row" }}>
+          <InitialQuestionPanel
+            formData={initialQuestionFormData}
+            formDataSetter={setInitialQuestionFormData}
+            requestSent={initialQuestionSent}
+            requestSentSetter={setInitialQuestionSent}
+            isActive={activePanel === "question"}
+          />
+          <GeneratedFormPanel
+            initialFormData={initialQuestionFormData}
+            generatedFormDataSetter={setGeneratedFormData}
+            shouldFetchData={initialQuestionSent}
+            generatedFormSubmitted={generatedFormSubmitted}
+            generatedFormSubmittedSetter={setGeneratedFormSubmitted}
+            uidSetter={setUid}
+            isActive={activePanel === "generated"}
+          />
+          <AnswerPanel
+            uid={uid}
+            answerFormData={generatedFormData}
+            shouldFetchData={generatedFormSubmitted}
+            isActive={activePanel === "answer"}
+          />
+        </Stack>
+      </Container>
+      <Stack
+        component="footer"
+        direction="row-reverse"
+        alignItems="center"
+        sx={{
+          width: "100vw",
+          height: "2.5rem",
+          paddingInlineEnd: "0.75rem",
+          backgroundColor: "rgb(7 89 133)",
+        }}
+      >
+        <Link href={"https://github.com/TGianella/NoChatbot"}>
           <Image
             src={githubLogoWhite}
             alt={"github logo"}
             height={40}
             width={40}
           />
-        </a>
-      </footer>
+        </Link>
+      </Stack>
     </ThemeProvider>
   );
 }
