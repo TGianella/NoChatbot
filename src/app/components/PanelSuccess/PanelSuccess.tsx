@@ -1,13 +1,33 @@
 import Image from "next/image";
 import successIcon from "@/app/assets/succes.png";
+import Fade from "@mui/material/Fade";
+import Box from "@mui/material/Box";
 
 export const PanelSuccess = ({ success }: { success?: boolean }) => {
   return (
-    <div
-      className={`absolute size-full lg:h-[calc(100vh-5rem)] lg:w-[30%] bg-green-100 transition-opacity ease-in-out delay-300 duration-500 ${success ? "opacity-70 z-10" : "opacity-0"} grid place-items-center border-8 border-green-300 border-opacity-70 lg:border-0`}
-    >
-      {success && (
-        <div className="w-1/3 lg:w-1/2 aspect-square relative">
+    <Fade in={success} style={{ transitionDelay: "300ms" }}>
+      <Box
+        sx={{
+          position: "absolute",
+          width: { xs: "100%", md: "30%" },
+          height: { xs: "100%", md: "calc(100vh - 5rem)" },
+          backgroundColor: "#bef9c4",
+          display: "grid",
+          placeItems: "center",
+          borderStyle: "solid",
+          borderWidth: { xs: "8px", md: 0 },
+          borderColor: "#81ff60",
+          zIndex: 10,
+          filter: "opacity(70%)",
+        }}
+      >
+        <Box
+          sx={{
+            width: { xs: "33%", md: "50%" },
+            aspectRatio: "1 / 1",
+            position: "relative",
+          }}
+        >
           <Image
             src={successIcon}
             alt="success"
@@ -17,8 +37,8 @@ export const PanelSuccess = ({ success }: { success?: boolean }) => {
               objectFit: "contain",
             }}
           />
-        </div>
-      )}
-    </div>
+        </Box>
+      </Box>
+    </Fade>
   );
 };

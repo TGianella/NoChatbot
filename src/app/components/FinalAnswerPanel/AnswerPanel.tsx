@@ -4,6 +4,7 @@ import { AnswerSkeleton } from "@/app/components/skeletons/AnswerSkeleton/Answer
 import { useEffect, useRef, useState } from "react";
 import { postFormData } from "@/lib/postFormData";
 import { ResetButton } from "@/app/components/ResetButton/ResetButton";
+import Typography from "@mui/material/Typography";
 
 type FinalAnswerPanelProps = {
   uid: string;
@@ -44,7 +45,9 @@ export const AnswerPanel = ({
   }, [shouldFetchData]);
 
   let finalAnswerPanelContent = (
-    <p>No answer yet, submit the form returned by the LLM.</p>
+    <Typography paragraph>
+      No answer yet, submit the form returned by the LLM.
+    </Typography>
   );
 
   if (shouldFetchData) {
@@ -62,7 +65,7 @@ export const AnswerPanel = ({
   if (answer?.length > 0) {
     finalAnswerPanelContent = (
       <>
-        <p>{answer}</p>
+        <Typography paragraph>{answer}</Typography>
         <ResetButton>Ask another question</ResetButton>
       </>
     );
@@ -72,7 +75,7 @@ export const AnswerPanel = ({
     <Panel
       ref={panelRef}
       title="Here's your answer"
-      backgroundColorClass="bg-sky-300"
+      backgroundColorClass="#5fb4f4"
       isActive={isActive}
     >
       {finalAnswerPanelContent}

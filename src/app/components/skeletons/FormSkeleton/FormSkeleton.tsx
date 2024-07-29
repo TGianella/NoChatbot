@@ -3,6 +3,7 @@ import { getRandomIntegerInRange } from "@/app/components/skeletons/getRandomInt
 import { FormCheckboxSkeleton } from "@/app/components/skeletons/FormSkeleton/FormCheckboxSkeleton";
 import { FormRadioGroupSkeleton } from "@/app/components/skeletons/FormSkeleton/FormRadioGroupSkeleton";
 import { FormInputSkeleton } from "@/app/components/skeletons/FormSkeleton/FormInputSkeleton";
+import Stack from "@mui/material/Stack";
 
 const components = {
   checkbox: "checkbox",
@@ -34,9 +35,9 @@ export const FormSkeleton = () => {
   };
 
   return (
-    <div className="flex flex-col gap-2.5 self-center w-10/12">
+    <Stack spacing={2} alignSelf="center" width="83%">
       {skeleton.map((element, index) => pickRandomComponent(element, index))}
       <Skeleton variant="text" width="20%" />
-    </div>
+    </Stack>
   );
 };
