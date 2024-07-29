@@ -9,6 +9,8 @@ import { createTheme } from "@mui/material/styles";
 import InitialData from "@/app/components/InitialQuestionPanel/config/initialData.json";
 import Image from "next/image";
 import githubLogoWhite from "./assets/github-mark-white.png";
+import Stack from "@mui/material/Stack";
+import Container from "@mui/material/Container";
 
 export type ResponseData = {
   schema: object;
@@ -69,7 +71,7 @@ export default function Home() {
       <header className="flex justify-end items-center h-10 w-screen bg-sky-800 pe-3">
         <span className="text-white font-bold">NoChatbot</span>
       </header>
-      <main className="h-fit lg:h-[calc(100vh-5rem)] flex flex-col lg:flex-row">
+      <Stack direction={{ xs: "column", md: "row" }}>
         <InitialQuestionPanel
           formData={initialQuestionFormData}
           formDataSetter={setInitialQuestionFormData}
@@ -92,7 +94,7 @@ export default function Home() {
           shouldFetchData={generatedFormSubmitted}
           isActive={activePanel === "answer"}
         />
-      </main>
+      </Stack>
       <footer className="flex justify-end items-center h-10 w-screen bg-sky-800 pe-3">
         <a href={"https://github.com/TGianella/NoChatbot"}>
           <Image

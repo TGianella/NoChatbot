@@ -72,7 +72,7 @@ export const AnswerPanel = ({
     <Panel
       ref={panelRef}
       title="Here's your answer"
-      backgroundColorClass="bg-sky-300"
+      backgroundColorClass="#5fb4f4"
       isActive={isActive}
     >
       {finalAnswerPanelContent}

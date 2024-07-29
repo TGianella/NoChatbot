@@ -110,7 +110,7 @@ export const GeneratedFormPanel = ({
     <Panel
       ref={panelRef}
       title="Fill the form"
-      backgroundColorClass="bg-sky-200"
+      backgroundColorClass="#8dc9f7"
       success={generatedFormSubmitted}
       isActive={isActive}
     >

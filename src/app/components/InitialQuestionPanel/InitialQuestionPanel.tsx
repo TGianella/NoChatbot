@@ -38,7 +38,7 @@ export const InitialQuestionPanel = ({
   return (
     <Panel
       title="Ask your question"
-      backgroundColorClass="bg-sky-100"
+      backgroundColorClass="#b9ddfa"
       success={requestSent}
       isActive={isActive}
     >
