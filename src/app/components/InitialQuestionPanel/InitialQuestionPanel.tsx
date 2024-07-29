@@ -10,6 +10,9 @@ import Button from "@mui/material/Button";
 import { Dispatch, FormEvent, SetStateAction, useState } from "react";
 import { Panel } from "@/app/components/Panel/Panel";
 import { QuestionFormData } from "@/types/formData.types";
+import Stack from "@mui/material/Stack";
+import { FormSkeleton } from "@/app/components/skeletons/FormSkeleton/FormSkeleton";
+import { AnswerSkeleton } from "@/app/components/skeletons/AnswerSkeleton/AnswerSkeleton";
 
 type RequestPanelProps = {
   formData: QuestionFormData;
@@ -54,9 +57,7 @@ export const InitialQuestionPanel = ({
             setErrors(errors ? (errors as ErrorObject[]) : []);
           }}
         />
-        <div className="flex gap-3">
-          <Button type="submit">Submit</Button>
-        </div>
+        <Button type="submit">Submit</Button>
       </form>
     </Panel>
   );

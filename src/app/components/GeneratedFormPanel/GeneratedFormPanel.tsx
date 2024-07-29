@@ -20,6 +20,8 @@ import { FormSkeleton } from "@/app/components/skeletons/FormSkeleton/FormSkelet
 import { QuestionFormData } from "@/types/formData.types";
 import { ResetButton } from "@/app/components/ResetButton/ResetButton";
 import { ErrorAlert } from "@/app/components/ErrorAlert/ErrorAlert";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
 
 type ResponsePanelProps = {
   generatedFormDataSetter: Dispatch<SetStateAction<ResponseData>>;
@@ -73,7 +75,9 @@ export const GeneratedFormPanel = ({
   };
 
   let panelContent = (
-    <p>Nothing to show yet, submit the request form first !</p>
+    <Typography paragraph>
+      Nothing to show yet, submit the request form first !
+    </Typography>
   );
 
   if (shouldFetchData) {
@@ -98,10 +102,10 @@ export const GeneratedFormPanel = ({
             setErrors(errors ? (errors as ErrorObject[]) : []);
           }}
         />
-        <div className="flex gap-3">
+        <Stack direction="row" spacing={3}>
           <Button type="submit">Submit</Button>
           <ResetButton>Reset</ResetButton>
-        </div>
+        </Stack>
       </form>
     );
   }

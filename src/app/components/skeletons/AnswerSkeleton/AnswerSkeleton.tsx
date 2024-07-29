@@ -2,6 +2,7 @@
 
 import { Skeleton } from "@mui/material";
 import { getRandomIntegerInRange } from "@/app/components/skeletons/getRandomIntegerInRange";
+import Stack from "@mui/material/Stack";
 
 const linesNumber = getRandomIntegerInRange(3, 10);
 const linesLength = Array.from({ length: linesNumber }, () =>
@@ -10,10 +11,10 @@ const linesLength = Array.from({ length: linesNumber }, () =>
 
 export const AnswerSkeleton = () => {
   return (
-    <div className="flex flex-col gap-1">
+    <Stack spacing={1} alignSelf="center" width="83%">
       {linesLength.map((length, index) => (
         <Skeleton key={index} width={`${length}%`} />
       ))}
-    </div>
+    </Stack>
   );
 };
