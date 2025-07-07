@@ -7,7 +7,7 @@
   <img alt="TailwindCSS" src="https://img.shields.io/badge/Tailwind-06B6D4?logo=tailwindcss&logoColor=white&style=for-the-badge" />
 </p>
 
-[!CAUTION]
+> [!CAUTION]
 > Due to an error in the back-end that won't be fixed, you might not get an answer to your request 😢
 
 Nowadays if you need to answer a complex question, you are probably going to spend 5 minutes going back and forth with a LLM chatbot in order to specify your request and get your answer. 
